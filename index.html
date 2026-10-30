@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinOS - Predict. Plan. Protect.</title>
+  <meta name="description" content="Financial stability operating system tailored for middle-class and working families. Predict cashflows, plan budgets, manage expenses, and track savings.">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <!-- Lucide Icons & Chart.js CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div id="app">
+    <!-- ===================================================
+         SIDEBAR NAVIGATION
+         =================================================== -->
+    <aside class="sidebar" id="sidebar-navigation" style="display:none;">
+      <div class="sidebar-header">
+        <div class="brand-logo">F</div>
+        <div class="brand-info">
+          <h1>FinOS</h1>
+          <span>Predict. Plan. Protect.</span>
+        </div>
+      </div>
+
+      <div class="sidebar-menu">
+        <div class="menu-category">Main Overview</div>
+        <a class="nav-item active" data-route="dashboard">
+          <i data-lucide="layout-dashboard"></i> Dashboard
+        </a>
+
+        <div class="menu-category">Forecast & Cashflow</div>
+        <a class="nav-item" data-route="future-wallet">
+          <i data-lucide="sparkles"></i> Future Wallet <span class="badge-tag">90D Forecast</span>
+        </a>
+
+        <div class="menu-category">Financial Modules</div>
+        <a class="nav-item" data-route="expenses">
+          <i data-lucide="receipt"></i> Expense Tracker
+        </a>
+        <a class="nav-item" data-route="subscriptions">
+          <i data-lucide="repeat"></i> Subscriptions
+        </a>
+        <a class="nav-item" data-route="budget">
+          <i data-lucide="pie-chart"></i> Budget Planner
+        </a>
+        <a class="nav-item" data-route="goals">
+          <i data-lucide="target"></i> Financial Goals
+        </a>
+        <a class="nav-item" data-route="emergency">
+          <i data-lucide="shield-check"></i> Emergency Fund
+        </a>
+
+        <div class="menu-category">Insights & News</div>
+        <a class="nav-item" data-route="govt-alerts">
+          <i data-lucide="landmark"></i> Govt & Inflation
+        </a>
+        <a class="nav-item" data-route="notifications">
+          <i data-lucide="bell"></i> Notifications
+        </a>
+        <a class="nav-item" data-route="reports">
+          <i data-lucide="file-text"></i> Audit Reports
+        </a>
+
+        <div class="menu-category">Account</div>
+        <a class="nav-item" data-route="profile">
+          <i data-lucide="user"></i> Profile & Settings
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-pill">
+          <div class="user-avatar" id="sidebar-user-avatar">U</div>
+          <div class="user-details">
+            <div class="user-name" id="sidebar-user-name">User</div>
+            <div class="user-role">FinOS Account</div>
+          </div>
+          <button class="icon-btn" id="btn-logout" title="Logout" style="width:32px; height:32px;">
+            <i data-lucide="log-out" style="width:16px; height:16px;"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===================================================
+         MAIN CONTENT AREA
+         =================================================== -->
+    <main class="main-content" id="main-content">
+      <!-- TOPBAR NAVIGATION -->
+      <header class="topbar" id="topbar-navigation" style="display:none;">
+        <div style="display:flex; align-items:center; gap:16px;">
+          <button class="mobile-toggle" id="mobile-menu-btn">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="page-title-group">
+            <h2>Welcome back, <span id="dash-user-welcome">User</span></h2>
+            <p>Here is your real-time financial health summary.</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="icon-btn" data-route="notifications" title="Notifications">
+            <i data-lucide="bell"></i>
+            <span class="notification-dot" id="topbar-unread-badge" style="display:none;"></span>
+          </button>
+          <button class="btn btn-sm btn-primary" data-modal-target="add-tx-modal">
+            + Add Expense
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW CONTAINER -->
+      <div class="view-container">
+
+        <!-- 1. LANDING PAGE VIEW -->
+        <section class="page-view active" id="view-landing">
+          <div class="landing-hero">
+            <div class="hero-badge">
+              <i data-lucide="shield-check"></i> Complete Financial Operating System for Families
+            </div>
+            <h1 class="hero-title">Predict your cashflow. Plan your budget. Protect your family.</h1>
+            <p class="hero-subtitle">
+              FinOS helps working families eliminate financial stress, optimize subscription costs, track expenses, and build a guaranteed emergency cushion with real-time data persistence.
+            </p>
+            <div class="hero-cta-group">
+              <a class="btn btn-primary" data-route="signup">Get Started Free →</a>
+              <a class="btn btn-secondary" data-route="login">Sign In</a>
+            </div>
+
+            <div class="feature-cards-grid">
+              <div class="glass-card">
+                <div class="metric-icon"><i data-lucide="trending-up"></i></div>
+                <h3 style="margin-top:12px; font-weight:700;">Future Wallet (30/60/90D)</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-top:8px;">Predict upcoming balance, expenses, and potential liquidity crunches before they happen.</p>
+              </div>
+              <div class="glass-card">
+                <div class="metric-icon success"><i data-lucide="repeat"></i></div>
+                <h3 style="margin-top:12px; font-weight:700;">Unused Sub Detector</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-top:8px;">Automatically flag idle OTT or gym subscriptions to save thousands annually.</p>
+              </div>
+              <div class="glass-card">
+                <div class="metric-icon warning"><i data-lucide="pie-chart"></i></div>
+                <h3 style="margin-top:12px; font-weight:700;">Category Budget Planner</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-top:8px;">Set monthly limits for groceries, rent, EMIs, and utilities with real-time progress bars.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. LOGIN VIEW -->
+        <section class="page-view" id="view-login">
+          <div class="auth-wrapper">
+            <div class="auth-card">
+              <div class="auth-header">
+                <h3>Welcome Back</h3>
+                <p>Log in to your FinOS Account</p>
+              </div>
+
+              <form id="login-form">
+                <div class="form-group">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" id="login-email" class="form-control" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Password</label>
+                  <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:18px; font-size:0.82rem;">
+                  <label><input type="checkbox" id="login-remember" checked> Remember session</label>
+                  <a data-route="forgot-password" style="color:var(--primary); cursor:pointer;">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+              </form>
+
+              <div style="text-align:center; margin-top:16px; font-size:0.85rem; color:var(--text-muted);">
+                Don't have an account? <a data-route="signup" style="color:var(--primary); cursor:pointer;">Sign Up Free</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. SIGNUP VIEW -->
+        <section class="page-view" id="view-signup">
+          <div class="auth-wrapper">
+            <div class="auth-card">
+              <div class="auth-header">
+                <h3>Create Account</h3>
+                <p>Join FinOS to build your family financial cushion</p>
+              </div>
+
+              <form id="signup-form">
+                <div class="form-group">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" id="signup-fullname" class="form-control" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" id="signup-email" class="form-control" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Password</label>
+                  <input type="password" id="signup-password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Create Free Account</button>
+              </form>
+
+              <div style="text-align:center; margin-top:16px; font-size:0.85rem; color:var(--text-muted);">
+                Already registered? <a data-route="login" style="color:var(--primary); cursor:pointer;">Log In</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. FORGOT PASSWORD VIEW -->
+        <section class="page-view" id="view-forgot-password">
+          <div class="auth-wrapper">
+            <div class="auth-card">
+              <div class="auth-header">
+                <h3>Reset Password</h3>
+                <p>We'll send password recovery instructions to your email</p>
+              </div>
+              <form id="forgot-form">
+                <div class="form-group">
+                  <label class="form-label">Registered Email</label>
+                  <input type="email" class="form-control" placeholder="name@example.com" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Send Reset Link</button>
+              </form>
+              <div style="text-align:center; margin-top:16px;">
+                <a data-route="login" style="color:var(--primary); cursor:pointer; font-size:0.85rem;">← Back to Login</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. ONBOARDING WIZARD VIEW -->
+        <section class="page-view" id="view-onboarding">
+          <div class="onboarding-container">
+            <div class="glass-card">
+              <div class="wizard-steps">
+                <div class="wizard-step-item active">
+                  <div class="step-circle">1</div>
+                  <span class="step-title">Basic Info</span>
+                </div>
+                <div class="wizard-step-item">
+                  <div class="step-circle">2</div>
+                  <span class="step-title">Fixed Costs</span>
+                </div>
+                <div class="wizard-step-item">
+                  <div class="step-circle">3</div>
+                  <span class="step-title">Savings Goal</span>
+                </div>
+              </div>
+
+              <form id="onboarding-wizard-form">
+                <!-- STEP 1 -->
+                <div class="wizard-step-content" style="display:block;">
+                  <h3 style="margin-bottom:16px;">Tell us about your household</h3>
+                  <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="ob-name" class="form-control" placeholder="Full Name">
+                  </div>
+                  <div class="grid-2">
+                    <div class="form-group">
+                      <label class="form-label">City</label>
+                      <input type="text" id="ob-city" class="form-control" placeholder="City">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Occupation</label>
+                      <input type="text" id="ob-occupation" class="form-control" placeholder="Occupation">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Family Members Count</label>
+                    <input type="number" id="ob-family" class="form-control" value="1">
+                  </div>
+                </div>
+
+                <!-- STEP 2 -->
+                <div class="wizard-step-content" style="display:none;">
+                  <h3 style="margin-bottom:16px;">Monthly Income & Fixed Obligations</h3>
+                  <div class="form-group">
+                    <label class="form-label">Total Monthly Net Income (₹)</label>
+                    <input type="number" id="ob-income" class="form-control" placeholder="0">
+                  </div>
+                  <div class="grid-2">
+                    <div class="form-group">
+                      <label class="form-label">Monthly Rent / Mortgage (₹)</label>
+                      <input type="number" id="ob-rent" class="form-control" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Monthly Loan EMIs (₹)</label>
+                      <input type="number" id="ob-emi" class="form-control" placeholder="0">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- STEP 3 -->
+                <div class="wizard-step-content" style="display:none;">
+                  <h3 style="margin-bottom:16px;">Financial Goals & Preference</h3>
+                  <div class="form-group">
+                    <label class="form-label">Target Monthly Savings (₹)</label>
+                    <input type="number" id="ob-savings" class="form-control" placeholder="0">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Primary Financial Goal</label>
+                    <input type="text" id="ob-goal" class="form-control" placeholder="e.g. Emergency Cushion Fund">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Preferred Language</label>
+                    <select id="ob-language" class="form-control">
+                      <option value="en">English</option>
+                      <option value="hi">Hindi (हिंदी)</option>
+                      <option value="mr">Marathi (मराठी)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:24px;">
+                  <button type="button" class="btn btn-secondary" id="onboarding-prev-btn" style="visibility:hidden;">← Back</button>
+                  <button type="button" class="btn btn-primary" id="onboarding-next-btn">Next Step →</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. DASHBOARD VIEW -->
+        <section class="page-view" id="view-dashboard">
+          <div class="grid-4" style="margin-bottom:24px;">
+            <!-- Health Score Widget -->
+            <div class="glass-card">
+              <div class="metric-header">
+                <div class="metric-title">Financial Health Score</div>
+              </div>
+              <div class="score-ring-container" style="width:110px; height:110px;">
+                <svg width="110" height="110" viewBox="0 0 140 140">
+                  <circle cx="70" cy="70" r="60" fill="none" stroke="var(--bg-surface)" stroke-width="12"/>
+                  <circle id="dash-score-ring" cx="70" cy="70" r="60" fill="none" stroke="var(--success)" stroke-width="12" stroke-dasharray="0, 377" stroke-dashoffset="0" transform="rotate(-90 70 70)"/>
+                </svg>
+                <div class="score-ring-content">
+                  <div class="score-number" id="dash-score-number" style="font-size:1.8rem;">0</div>
+                  <div class="score-label" id="dash-score-status" style="font-size:0.65rem;">-</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Net Balance Widget -->
+            <div class="glass-card metric-card">
+              <div class="metric-header">
+                <div class="metric-title">Net Balance</div>
+                <div class="metric-icon success"><i data-lucide="wallet"></i></div>
+              </div>
+              <div class="metric-value" id="dash-current-balance">₹0</div>
+              <div class="metric-sub up">Real-time Net Surplus</div>
+            </div>
+
+            <!-- Savings Target Widget -->
+            <div class="glass-card metric-card">
+              <div class="metric-header">
+                <div class="metric-title">Monthly Savings Target</div>
+                <div class="metric-icon"><i data-lucide="piggy-bank"></i></div>
+              </div>
+              <div class="metric-value" id="dash-monthly-savings">₹0</div>
+              <div class="metric-sub">User Defined Goal</div>
+            </div>
+
+            <!-- Active Subscriptions Cost Widget -->
+            <div class="glass-card metric-card">
+              <div class="metric-header">
+                <div class="metric-title">Subscriptions Cost</div>
+                <div class="metric-icon warning"><i data-lucide="repeat"></i></div>
+              </div>
+              <div class="metric-value" id="dash-subscriptions-cost">₹0</div>
+              <div class="metric-sub">Active Subscriptions</div>
+            </div>
+          </div>
+
+          <!-- Charts & Financial Insights Grid -->
+          <div class="grid-3" style="margin-bottom:24px;">
+            <div class="glass-card" style="grid-column: span 2;">
+              <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:16px;">Monthly Cashflow Trend</h3>
+              <div style="height: 250px; position:relative;">
+                <canvas id="dash-cashflow-chart"></canvas>
+              </div>
+            </div>
+
+            <div class="glass-card">
+              <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:16px;">Financial Insights</h3>
+              <div id="dash-ai-tips">
+                <!-- Insights rendered dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Transactions & Category Chart Grid -->
+          <div class="grid-3">
+            <div class="glass-card" style="grid-column: span 2;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="font-size:1.1rem; font-weight:700;">Recent Transactions</h3>
+                <a data-route="expenses" class="btn btn-sm btn-outline">View All</a>
+              </div>
+              <div class="data-table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Date</th>
+                      <th>Method</th>
+                      <th style="text-align:right;">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-recent-transactions">
+                    <!-- Loaded dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="glass-card">
+              <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:16px;">Expense Category Breakdown</h3>
+              <div style="height: 230px; position:relative;">
+                <canvas id="dash-category-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. EXPENSE TRACKER VIEW -->
+        <section class="page-view" id="view-expenses">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <h3>Expense Tracker & Log</h3>
+            <button class="btn btn-primary" data-modal-target="add-tx-modal">+ Add Transaction</button>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:24px;">
+            <div class="glass-card">
+              <h4 style="margin-bottom:14px;">Expense Category Share</h4>
+              <div style="height:220px;"><canvas id="expense-pie-chart"></canvas></div>
+            </div>
+            <div class="glass-card">
+              <h4 style="margin-bottom:14px;">Category Spend (₹)</h4>
+              <div style="height:220px;"><canvas id="expense-bar-chart"></canvas></div>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div style="display:flex; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
+              <input type="text" id="tx-search-input" class="form-control" placeholder="Search transactions..." style="max-width:260px;">
+              <select id="tx-filter-category" class="form-control" style="max-width:180px;">
+                <option value="all">All Categories</option>
+                <option value="Housing & Rent">Housing & Rent</option>
+                <option value="Debt & EMI">Debt & EMI</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Subscriptions">Subscriptions</option>
+                <option value="Children & School">Children & School</option>
+                <option value="Salary">Salary</option>
+              </select>
+              <select id="tx-filter-type" class="form-control" style="max-width:160px;">
+                <option value="all">All Types</option>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </div>
+
+            <div class="data-table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Notes</th>
+                    <th>Date</th>
+                    <th>Method</th>
+                    <th style="text-align:right;">Amount</th>
+                    <th style="text-align:center;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="expense-table-body">
+                  <!-- Loaded dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. SUBSCRIPTION MANAGER VIEW -->
+        <section class="page-view" id="view-subscriptions">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <div>
+              <h3>Subscription Manager</h3>
+              <p style="color:var(--text-muted); font-size:0.88rem;">Track recurring apps, utilities, memberships, and detect unused spending.</p>
+            </div>
+            <button class="btn btn-primary" data-modal-target="add-sub-modal">+ Add Subscription</button>
+          </div>
+
+          <div class="grid-4" style="margin-bottom:24px;">
+            <div class="glass-card metric-card">
+              <div class="metric-title">Total Monthly Cost</div>
+              <div class="metric-value" id="sub-total-monthly">₹0</div>
+            </div>
+            <div class="glass-card metric-card">
+              <div class="metric-title">Total Annual Cost</div>
+              <div class="metric-value" id="sub-total-annual">₹0</div>
+            </div>
+            <div class="glass-card metric-card">
+              <div class="metric-title">Unused Subscriptions</div>
+              <div class="metric-value" id="sub-unused-count" style="color:var(--warning);">0</div>
+            </div>
+            <div class="glass-card metric-card">
+              <div class="metric-title">Potential Unused Savings</div>
+              <div class="metric-value" id="sub-potential-savings" style="color:var(--success);">₹0/mo</div>
+            </div>
+          </div>
+
+          <div class="grid-3" id="subscriptions-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- 9. BUDGET PLANNER VIEW -->
+        <section class="page-view" id="view-budget">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <h3>Monthly Budget Allocation Planner</h3>
+            <button class="btn btn-primary" data-modal-target="set-budget-modal">+ Allocate Budget</button>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:24px;">
+            <div class="glass-card metric-card">
+              <div class="metric-title">Total Allocated Budget</div>
+              <div class="metric-value" id="budget-total-allocated">₹0</div>
+            </div>
+            <div class="glass-card metric-card">
+              <div class="metric-title">Total Spent This Month</div>
+              <div class="metric-value" id="budget-total-spent">₹0</div>
+            </div>
+            <div class="glass-card metric-card">
+              <div class="metric-title">Remaining Budget Buffer</div>
+              <div class="metric-value" id="budget-total-remaining" style="color:var(--success);">₹0</div>
+            </div>
+          </div>
+
+          <div id="budget-categories-list">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- 10. FINANCIAL GOALS VIEW -->
+        <section class="page-view" id="view-goals">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <div>
+              <h3>Financial Milestone Goals</h3>
+              <p style="color:var(--text-muted); font-size:0.88rem;">Track progress for emergency funds, education, and family milestones.</p>
+            </div>
+            <button class="btn btn-primary" data-modal-target="add-goal-modal">+ Set New Goal</button>
+          </div>
+
+          <div class="grid-3" id="goals-cards-grid">
+            <!-- Loaded dynamically -->
+          </div>
+        </section>
+
+        <!-- 11. EMERGENCY FUND VIEW -->
+        <section class="page-view" id="view-emergency">
+          <h3 style="margin-bottom:8px;">Emergency Safety Cushion Planner</h3>
+          <p style="color:var(--text-muted); margin-bottom:24px;">Calculate exact 3-month and 6-month essential survival funds for your family.</p>
+
+          <div class="grid-2" style="margin-bottom:24px;">
+            <div class="glass-card">
+              <h4 style="margin-bottom:14px;">Monthly Survival Baseline</h4>
+              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>Monthly Rent / Mortgage</span><strong id="emg-rent-display">₹0</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>Monthly Loan EMIs</span><strong id="emg-emi-display">₹0</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>Essential Groceries & Bills</span><strong id="emg-essential-display">₹10,000</strong>
+              </div>
+              <hr style="border-color:var(--border-color); margin:12px 0;">
+              <div style="display:flex; justify-content:space-between; font-size:1.1rem; font-weight:700;">
+                <span>Total Essential Baseline / Mo</span><span id="emg-monthly-total" style="color:var(--primary);">₹0</span>
+              </div>
+            </div>
+
+            <div class="glass-card">
+              <h4 style="margin-bottom:14px;">Emergency Cushion Target</h4>
+              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>3-Month Cushion Target</span><strong id="emg-target-3m">₹0</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>6-Month Cushion Target</span><strong id="emg-target-6m">₹0</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>Current Goal Savings</span><strong id="emg-current-saved" style="color:var(--success);">₹0</strong>
+              </div>
+              <div style="margin-top:14px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:6px;">
+                  <span>3-Month Completion</span><span id="emg-percent-3m" style="font-weight:700;">0%</span>
+                </div>
+                <div class="progress-container">
+                  <div class="progress-bar success" id="emg-progress-3m-bar" style="width:0%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card" style="border-left:4px solid var(--primary);">
+            <div id="emg-monthly-rec" style="font-size:0.95rem;">
+              <!-- Loaded dynamically -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 12. FUTURE WALLET VIEW -->
+        <section class="page-view" id="view-future-wallet">
+          <div style="margin-bottom:24px;">
+            <h3>Future Wallet Cashflow Forecast</h3>
+            <p style="color:var(--text-muted); font-size:0.88rem;">30, 60, and 90-day predictive balance, expenditure projections, and liquidity risk alerts.</p>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:24px;">
+            <!-- 30 Days -->
+            <div class="glass-card">
+              <span class="badge badge-primary">30 Days Forecast</span>
+              <h4 style="margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Expected Balance</h4>
+              <div class="metric-value" id="fw-30-balance" style="margin:6px 0;">₹0</div>
+              <div style="font-size:0.8rem; color:var(--text-dim);">Expenses: <span id="fw-30-expense">₹0</span></div>
+              <div style="font-size:0.8rem; color:var(--success);">Savings Surplus: <span id="fw-30-savings">₹0</span></div>
+            </div>
+
+            <!-- 60 Days -->
+            <div class="glass-card">
+              <span class="badge badge-primary">60 Days Forecast</span>
+              <h4 style="margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Expected Balance</h4>
+              <div class="metric-value" id="fw-60-balance" style="margin:6px 0;">₹0</div>
+              <div style="font-size:0.8rem; color:var(--text-dim);">Expenses: <span id="fw-60-expense">₹0</span></div>
+              <div style="font-size:0.8rem; color:var(--success);">Savings Surplus: <span id="fw-60-savings">₹0</span></div>
+            </div>
+
+            <!-- 90 Days -->
+            <div class="glass-card">
+              <span class="badge badge-primary">90 Days Forecast</span>
+              <h4 style="margin-top:10px; font-size:0.85rem; color:var(--text-muted);">Expected Balance</h4>
+              <div class="metric-value" id="fw-90-balance" style="margin:6px 0;">₹0</div>
+              <div style="font-size:0.8rem; color:var(--text-dim);">Expenses: <span id="fw-90-expense">₹0</span></div>
+              <div style="font-size:0.8rem; color:var(--success);">Savings Surplus: <span id="fw-90-savings">₹0</span></div>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="glass-card" style="grid-column: span 2;">
+              <h4 style="margin-bottom:14px;">90-Day Predictive Cashflow Curve</h4>
+              <div style="height:250px;"><canvas id="future-wallet-chart"></canvas></div>
+            </div>
+
+            <div class="glass-card">
+              <h4 style="margin-bottom:14px;">Liquidity Risk Alerts</h4>
+              <div id="fw-risk-analysis">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 13. GOVERNMENT ALERTS VIEW -->
+        <section class="page-view" id="view-govt-alerts">
+          <h3 style="margin-bottom:8px;">Government Policy & Inflation News</h3>
+          <p style="color:var(--text-muted); margin-bottom:24px;">Real-time policy alerts for LPG, RBI repo rates, fuel prices, and electricity tariffs.</p>
+          <div id="govt-alerts-feed">
+            <!-- Loaded dynamically -->
+          </div>
+        </section>
+
+        <!-- 14. NOTIFICATIONS VIEW -->
+        <section class="page-view" id="view-notifications">
+          <h3 style="margin-bottom:16px;">Notification Center</h3>
+          <div id="notifications-list">
+            <!-- Loaded dynamically -->
+          </div>
+        </section>
+
+        <!-- 15. REPORTS VIEW -->
+        <section class="page-view" id="view-reports">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <h3>Monthly Financial Audit Report</h3>
+            <div style="display:flex; gap:12px;">
+              <button class="btn btn-secondary" id="btn-export-csv">📥 Download CSV</button>
+              <button class="btn btn-primary" id="btn-print-report">🖨️ Print Statement</button>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-bottom:24px;">
+            <div class="glass-card metric-card">
+              <div class="metric-title">Total Monthly Income</div>
+              <div class="metric-value" id="report-total-income" style="color:var(--success);">₹0</div>
+            </div>
+            <div class="glass-card metric-card">
+              <div class="metric-title">Total Monthly Expenses</div>
+              <div class="metric-value" id="report-total-expense" style="color:var(--danger);">₹0</div>
+            </div>
+            <div class="glass-card metric-card">
+              <div class="metric-title">Net Financial Surplus</div>
+              <div class="metric-value" id="report-net-savings" style="color:var(--primary);">₹0</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 16. PROFILE & SETTINGS VIEW -->
+        <section class="page-view" id="view-profile">
+          <h3 style="margin-bottom:24px;">Profile & System Settings</h3>
+          <div class="glass-card" style="max-width:700px;">
+            <form id="profile-edit-form">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" id="prof-name" class="form-control">
+              </div>
+              <div class="grid-2">
+                <div class="form-group">
+                  <label class="form-label">City</label>
+                  <input type="text" id="prof-city" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Occupation</label>
+                  <input type="text" id="prof-occupation" class="form-control">
+                </div>
+              </div>
+              <div class="grid-3">
+                <div class="form-group">
+                  <label class="form-label">Monthly Income (₹)</label>
+                  <input type="number" id="prof-income" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Monthly Rent (₹)</label>
+                  <input type="number" id="prof-rent" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Monthly EMI (₹)</label>
+                  <input type="number" id="prof-emi" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Financial Goal</label>
+                <input type="text" id="prof-goal" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Language</label>
+                <select id="prof-language" class="form-control">
+                  <option value="en">English</option>
+                  <option value="hi">Hindi (हिंदी)</option>
+                  <option value="mr">Marathi (मराठी)</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Save Profile Changes</button>
+            </form>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ===================================================
+         MODAL DIALOGS
+         =================================================== -->
+
+    <!-- ADD TRANSACTION MODAL -->
+    <div class="modal-overlay" id="add-tx-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Transaction</h4>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="add-transaction-form">
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <select id="tx-type" class="form-control">
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount (₹)</label>
+            <input type="number" id="tx-amount" class="form-control" required placeholder="1500">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="tx-category" class="form-control">
+              <option value="Groceries">Groceries</option>
+              <option value="Housing & Rent">Housing & Rent</option>
+              <option value="Debt & EMI">Debt & EMI</option>
+              <option value="Utilities">Utilities</option>
+              <option value="Subscriptions">Subscriptions</option>
+              <option value="Children & School">Children & School</option>
+              <option value="Salary">Salary</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Payment Method</label>
+            <select id="tx-method" class="form-control">
+              <option value="UPI">UPI</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Cash">Cash</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" id="tx-date" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <input type="text" id="tx-notes" class="form-control" placeholder="e.g. Supermarket grocery shopping">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Save Transaction</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ADD SUBSCRIPTION MODAL -->
+    <div class="modal-overlay" id="add-sub-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Subscription</h4>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="add-sub-form">
+          <div class="form-group">
+            <label class="form-label">Subscription Name</label>
+            <input type="text" id="sub-name" class="form-control" placeholder="e.g. Netflix, Spotify, Gym" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Monthly Cost (₹)</label>
+            <input type="number" id="sub-monthly-cost" class="form-control" required placeholder="499">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Billing Cycle</label>
+            <select id="sub-billing-cycle" class="form-control">
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Next Renewal Date</label>
+            <input type="date" id="sub-renewal-date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="sub-used-regularly" checked> I use this service regularly</label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Save Subscription</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- SET BUDGET MODAL -->
+    <div class="modal-overlay" id="set-budget-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Set Category Budget</h4>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="set-budget-form">
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="budget-category" class="form-control">
+              <option value="Groceries">Groceries</option>
+              <option value="Housing & Rent">Housing & Rent</option>
+              <option value="Debt & EMI">Debt & EMI</option>
+              <option value="Utilities">Utilities</option>
+              <option value="Subscriptions">Subscriptions</option>
+              <option value="Children & School">Children & School</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Allocated Amount (₹)</label>
+            <input type="number" id="budget-amount" class="form-control" required placeholder="10000">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Save Budget Limit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ADD GOAL MODAL -->
+    <div class="modal-overlay" id="add-goal-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Set Financial Goal</h4>
+          <button class="modal-close">&times;</button>
+        </div>
+        <form id="add-goal-form">
+          <div class="form-group">
+            <label class="form-label">Goal Title</label>
+            <input type="text" id="goal-title" class="form-control" placeholder="e.g. Diwali Savings" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Amount (₹)</label>
+            <input type="number" id="goal-target-amount" class="form-control" required placeholder="50000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Date</label>
+            <input type="date" id="goal-target-date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Monthly Target Contribution (₹)</label>
+            <input type="number" id="goal-monthly-contrib" class="form-control" placeholder="5000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="goal-category" class="form-control">
+              <option value="Emergency">Emergency</option>
+              <option value="Education">Education</option>
+              <option value="Festival">Festival</option>
+              <option value="Savings">Savings</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Set Goal</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="global-toast-container"></div>
+
+  </div>
+
+  <!-- Master JavaScript Application Script -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

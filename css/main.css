@@ -1,0 +1,412 @@
+/* ===================================================
+   FinOS AI - Minimalist Neutral Glassmorphism Main Layout
+   =================================================== */
+
+@import url('./variables.css');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(26, 29, 32, 0.2);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Master Ambient Background with #DCE3DE Pale Sage Glows & #F1F3F2 Off-White Base */
+#app {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  background: 
+    radial-gradient(circle at 5% 5%, #FFFFFF 0%, transparent 45%),
+    radial-gradient(circle at 95% 10%, #DCE3DE 0%, transparent 50%),
+    radial-gradient(circle at 10% 90%, #DCE3DE 0%, transparent 50%),
+    radial-gradient(circle at 90% 85%, #FFFFFF 0%, transparent 45%),
+    #F1F3F2;
+  overflow: hidden;
+}
+
+/* Floating Glass Water Droplets / Liquid Orbs */
+#app::before {
+  content: '';
+  position: absolute;
+  top: -70px;
+  left: 200px;
+  width: 240px;
+  height: 240px;
+  border-radius: 48% 52% 45% 55% / 55% 45% 55% 45%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(220, 227, 222, 0.3) 100%);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 20px 45px rgba(26, 29, 32, 0.08), inset 0 2px 10px #FFFFFF, inset 0 -3px 10px rgba(0, 0, 0, 0.04);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+#app::after {
+  content: '';
+  position: absolute;
+  bottom: 60px;
+  right: -50px;
+  width: 290px;
+  height: 290px;
+  border-radius: 52% 48% 55% 45% / 45% 55% 45% 55%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(220, 227, 222, 0.4) 100%);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 25px 50px rgba(26, 29, 32, 0.08), inset 0 3px 15px #FFFFFF;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  width: 270px;
+  background: rgba(241, 243, 242, 0.75);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-right: 1.5px solid #FFFFFF;
+  border-top: 1.5px solid #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-glass);
+}
+
+.sidebar-header {
+  padding: 24px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid rgba(26, 29, 32, 0.06);
+}
+
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #1A1D20, #2D3338);
+  border: 1.5px solid #FFFFFF;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.4rem;
+  box-shadow: 0 8px 20px rgba(26, 29, 32, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.brand-info h1 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #1A1D20;
+}
+
+.brand-info span {
+  font-size: 0.7rem;
+  color: #4A524D;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.sidebar-menu {
+  flex: 1;
+  padding: 18px 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.menu-category {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 14px 12px 6px 12px;
+  letter-spacing: 1.2px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: var(--transition-fast);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.nav-item i, .nav-item svg {
+  width: 18px;
+  height: 18px;
+  transition: var(--transition-fast);
+}
+
+.nav-item:hover {
+  color: #1A1D20;
+  background: rgba(255, 255, 255, 0.6);
+  border-color: #FFFFFF;
+  box-shadow: inset 0 1px 0 #FFFFFF;
+}
+
+.nav-item.active {
+  color: #1A1D20;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid #FFFFFF;
+  box-shadow: var(--shadow-sm);
+  font-weight: 700;
+}
+
+.nav-item.active i, .nav-item.active svg {
+  color: #1A1D20;
+  transform: scale(1.1);
+}
+
+.badge-tag {
+  margin-left: auto;
+  padding: 2px 8px;
+  font-size: 0.65rem;
+  border-radius: var(--radius-full);
+  background: rgba(26, 29, 32, 0.08);
+  border: 1px solid rgba(26, 29, 32, 0.15);
+  color: #1A1D20;
+  font-weight: 700;
+}
+
+.badge-tag.danger {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.25);
+  color: var(--danger);
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(26, 29, 32, 0.06);
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1.5px solid #FFFFFF;
+  box-shadow: inset 0 1px 0 #FFFFFF;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #1A1D20, #36413C);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(26, 29, 32, 0.15);
+}
+
+.user-details {
+  flex: 1;
+  overflow: hidden;
+}
+
+.user-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #1A1D20;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  margin-left: 270px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: calc(100% - 270px);
+  position: relative;
+  z-index: 10;
+}
+
+/* Top Navigation Bar */
+.topbar {
+  height: 74px;
+  background: rgba(241, 243, 242, 0.75);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border-bottom: 1.5px solid #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 36px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #1A1D20;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.page-title-group h2 {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #1A1D20;
+}
+
+.page-title-group p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1.5px solid #FFFFFF;
+  box-shadow: inset 0 1px 0 #FFFFFF, var(--shadow-sm);
+  color: #1A1D20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: var(--transition-fast);
+}
+
+.icon-btn:hover {
+  color: #1A1D20;
+  border-color: #FFFFFF;
+  background: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.notification-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  box-shadow: 0 0 10px var(--danger);
+}
+
+/* View Container */
+.view-container {
+  padding: 36px;
+  flex: 1;
+}
+
+.page-view {
+  display: none;
+  animation: fadeInGlass 0.4s ease-out forwards;
+}
+
+.page-view.active {
+  display: block;
+}
+
+@keyframes fadeInGlass {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive Rules */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
+  }
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+  .mobile-toggle {
+    display: block;
+  }
+  .topbar {
+    padding: 0 20px;
+  }
+  .view-container {
+    padding: 24px 18px;
+  }
+}
